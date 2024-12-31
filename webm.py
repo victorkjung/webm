@@ -29,14 +29,19 @@ if st.button("Convert"):
         base_filename = os.path.splitext(uploaded_file.name)[0]
         output_path = os.path.join(CONVERTED_FOLDER, f"{base_filename}.{output_format}")
 
-        # Use FFmpeg to convert
-        command = ["ffmpeg", "-i", input_path, output_path]
-        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # Debug: Print paths
+        st.write(f"Input file path: {input_path}")
+        st.write(f"Output file path: {output_path}")
 
-        # Check if conversion was successful
-        if result.returncode == 0:
+        # FFmpeg command to convert
+        command = ["ffmpeg", "-i", input_path, output_path]
+
+        try:
+            # Execute FFmpeg command
+            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            
+            # If successful, show success message and download button
             st.success("Conversion successful!")
-            # Provide download link
             with open(output_path, "rb") as file:
                 st.download_button(
                     label="Download Converted File",
@@ -44,8 +49,12 @@ if st.button("Convert"):
                     file_name=f"{base_filename}.{output_format}",
                     mime=f"audio/{output_format}",
                 )
-        else:
-            st.error("Conversion failed! Check the file format and try again.")
+        
+        except subprocess.CalledProcessError as e:
+            # If error occurs during conversion, display the error details
+            st.error(f"Conversion failed! Error: {e.stderr.decode()}")
+            st.write(f"FFmpeg stdout: {e.stdout.decode()}")
+            st.write(f"FFmpeg stderr: {e.stderr.decode()}")
+
     else:
         st.warning("Please upload a file first.")
-
