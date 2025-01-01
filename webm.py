@@ -3,7 +3,7 @@ import streamlit as st
 import os
 
 # Ensure you provide the full path to FFmpeg if it's not in PATH
-FFMPEG_PATH = "/usr/bin/ffmpeg"  # Update this path if necessary
+FFMPEG_PATH = "/usr/local/bin/ffmpeg"  # Update this path if necessary
 
 # Setup directories
 UPLOAD_FOLDER = 'uploads'
