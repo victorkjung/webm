@@ -1,6 +1,9 @@
+import subprocess
 import streamlit as st
 import os
-import subprocess
+
+# Ensure you provide the full path to FFmpeg if it's not in PATH
+FFMPEG_PATH = "/usr/bin/ffmpeg"  # Update this path if necessary
 
 # Setup directories
 UPLOAD_FOLDER = 'uploads'
@@ -34,7 +37,7 @@ if st.button("Convert"):
         st.write(f"Output file path: {output_path}")
 
         # FFmpeg command to convert
-        command = ["ffmpeg", "-i", input_path, output_path]
+        command = [FFMPEG_PATH, "-i", input_path, output_path]
 
         # Debug: print the full FFmpeg command to check it
         st.write(f"Running command: {' '.join(command)}")
